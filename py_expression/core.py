@@ -61,7 +61,12 @@ class Operand():
         return parser.getVars(self)
     def constants(self):
         parser = Parser()
-        return parser.getConstants(self)    
+        return parser.getConstants(self) 
+    def operators(self):
+        parser = Parser()
+        return parser.getOperators(self) 
+        
+
 class Constant(Operand):
     def __init__(self,value,type ):
       self._value  = value
@@ -621,14 +626,14 @@ class Parser(metaclass=Singleton):
 
     def getOperators(self,expression):
         list = {}
-        if issubclass(expression,Operator):
-            list[expression.name] = "any"
+        if isinstance(expression,Operator):
+            list[expression.name] = expression.category
         if hasattr(expression, 'operands'):
             for p in expression.operands:
-                if type(p).__name__ ==  'Variable':
-                    list[p.name] = "any"
+                if isinstance(p,Operator):
+                    list[p.name] = p.category
                 elif hasattr(p, 'operands'):
-                    subList= self.getVars(p)
+                    subList= self.getOperators(p)
                     list = {**list, **subList}
         return list    
         
