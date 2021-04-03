@@ -1,0 +1,2 @@
+matplotlib==3.4.1
+py-expression==1.0.0
